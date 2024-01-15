@@ -50,3 +50,4 @@ jobs:
         prerelease: false
         files: |
           bin/*
+          *.tar.gz

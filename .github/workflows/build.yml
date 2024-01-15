@@ -20,9 +20,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Bump version
-      id: bump_version
-      run: echo "::set-output name=VERSION::$(make version)"
+    - name: Get version
+      run: echo "VERSION=$(make version)" >> $GITHUB_OUTPUT
+      
 
     - name: Build everything
       run: make all

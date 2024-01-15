@@ -1,5 +1,6 @@
 TIME_VERSION := $(shell date '+%Y%m%d')
 GIT_VERSION := $(shell git describe --always --long --dirty)
+VERSION := $(TIME_VERSION)-$(GIT_VERSION)
 BUILDTIME := $(shell date '+%Y-%m-%d_%H:%M:%S')
 BINARY_NAME := temperature-exporter
 GOARCH ?= arm64
@@ -8,7 +9,7 @@ GOARM ?=
 
 .PHONE: version
 version:
-	@echo $(TIME_VERSION)-$(GIT_VERSION)
+	@echo $(VERSION)
 
 .PHONY: run
 run:

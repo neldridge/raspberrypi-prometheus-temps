@@ -22,7 +22,7 @@ jobs:
 
     - name: Get version
       id: version
-      run: echo "VERSION=$(make version)" >> $GITHUB_OUTPUT
+      run: echo "VERSION=$(make version)" >> "$GITHUB_OUTPUT"
 
     - name: Build everything
       run: make all
@@ -31,10 +31,10 @@ jobs:
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: v${{ steps.get_version.outputs.VERSION }}
+        automatic_release_tag: v${{ steps.version.outputs.VERSION }}
         draft: false
         prerelease: false
-        title: Release v${{ steps.get_version.outputs.VERSION }}
+        title: Release v${{ steps.version.outputs.VERSION }}
         files: |
           bin/*
           *.tar.gz

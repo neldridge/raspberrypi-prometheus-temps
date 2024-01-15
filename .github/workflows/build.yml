@@ -41,13 +41,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    
     - name: Create Release
-      uses: actions/create-release@v1
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        tag_name: v${{ needs.build.outputs.VERSION }}
-        release_name: Release v${{ needs.build.outputs.VERSION }}
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: v${{ needs.build.outputs.VERSION }}
         draft: false
         prerelease: false
+        title: Release v${{ needs.build.outputs.VERSION }}
         files: |
           bin/*
           *.tar.gz

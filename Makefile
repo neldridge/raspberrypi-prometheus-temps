@@ -26,19 +26,24 @@ build:
 
 .PHONY: all
 all:
+	make amd64-linux
 	make arm64-linux
 	make arm7-linux
 	make arm5-linux
 
-.PHONY: arm64
+.PHONY: amd64-linux
+amd64-linux:
+	make build GOARCH=amd64 GOOS=linux
+
+.PHONY: arm64-linux
 arm64-linux:
 	make build GOARCH=arm64 GOOS=linux
 
-.PHONY: arm7
+.PHONY: arm7-linux
 arm7-linux:
 	make build GOARCH=arm GOOS=linux GOARM=7
 
-.PHONY: arm5
+.PHONY: arm5-linux
 arm5-linux:
 	make build GOARCH=arm GOOS=linux GOARM=5
 

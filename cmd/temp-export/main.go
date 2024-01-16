@@ -54,6 +54,7 @@ func checkExists(path string) bool {
 	// File may not be executable, we should check if the file exists at all
 	_, err := os.Stat(path)
 
+	// log.Debugf("Stat of %s: %s", path, stat)
 	if err == nil {
 		log.Debugf("Found %s", path)
 		return true
@@ -75,7 +76,7 @@ func determineBoard() string {
 
 	log.Debugf("Determining board type...")
 	// Check if we're on a tegra
-	if checkExists("/usr/bin/jetson_release") {
+	if checkExists("jetson_release") {
 		/*
 			# jetson_release
 			Software part of jetson-stats 4.2.3 - (c) 2023, Raffaello Bonghi
@@ -100,6 +101,9 @@ func determineBoard() string {
 			 - OpenCV: 4.1.1 - with CUDA: NO
 		*/
 		log.Debugf("Found /usr/bin/jetson_release")
+		return "tegra"
+	} else if checkExists("/etc/nv_tegra_release") {
+		log.Debugf("Found /etc/nv_tegra_release")
 		return "tegra"
 	} else if checkExists("/sys/firmware/devicetree/base/model") {
 		// check if "Raspberry PI" is in the model

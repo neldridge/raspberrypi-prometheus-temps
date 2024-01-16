@@ -19,8 +19,10 @@ run:
 build:
 	GOARCH=$(GOARCH) GOOS=$(GOOS) go build -o $(BINARY_NAME) -ldflags "-X main.VERSION=$(VERSION) -X main.BUILDTIME=$(BUILDTIME)" cmd/temp-export/main.go
 	chmod +x $(BINARY_NAME)
-	tar cvzf $(BINARY_NAME)-$(GOARCH)$(GOARM)-$(GOOS).tar.gz $(BINARY_NAME)
-	mv $(BINARY_NAME) bin/$(BINARY_NAME)-$(GOARCH)$(GOARM)-$(GOOS)
+	upx --ultra-brute $(BINARY_NAME)
+	mv $(BINARY_NAME) $(BINARY_NAME)-$(GOARCH)$(GOARM)-$(GOOS)
+	tar -czvf bin/$(BINARY_NAME)-$(GOARCH)$(GOARM)-$(GOOS)-$(VERSION).tar.gz $(BINARY_NAME)-$(GOARCH)$(GOARM)-$(GOOS)
+	mv $(BINARY_NAME)-$(GOARCH)$(GOARM)-$(GOOS) bin/
 
 .PHONY: all
 all:

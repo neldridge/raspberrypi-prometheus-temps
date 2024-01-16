@@ -11,20 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up Go
+    -
+      name: Set up Go
       uses: actions/setup-go@v2
       with:
         go-version: 1.21
       id: go
 
-    - name: Checkout code
+    -
+      name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Get version
+    -
+      name: Get version
       id: version
       run: echo "VERSION=$(make version)" >> "$GITHUB_OUTPUT"
 
-    - name: Build everything
+    -
+      name: Install UPX
+      uses: crazy-max/ghaction-upx@v3
+      with:
+        install-only: true
+
+    -
+      name: Build everything
       run: make all
 
     - name: Create Release
@@ -37,4 +47,3 @@ jobs:
         title: Release v${{ steps.version.outputs.VERSION }}
         files: |
           bin/*
-          *.tar.gz

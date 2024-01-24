@@ -1,0 +1,5 @@
+---
+- name: Install temperature exporter to linux system
+  hosts: all
+  roles:
+    - temperature-exporter

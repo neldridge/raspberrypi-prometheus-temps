@@ -1,0 +1,15 @@
+---
+temperature_exporter_install_dir: /usr/local/bin
+temperature_exporter_config_dir: /etc/temperature-exporter
+temperature_exporter_user: tempexporter
+temperature_exporter_architecture_map:
+  aarch64: arm64
+  armv7l: armv7
+  x86_64: amd64
+temperature_exporter_arch: "{{ temperature_exporter_architecture_map[ansible_architecture] | default(ansible_architecture) }}"
+
+temperature_exporter_log_level: info
+temperature_exporter_log_destination: syslog
+temperature_exporter_log_filename: /var/log/temperature-exporter.log
+temperature_exporter_http_bind_address: "0.0.0.0"
+temperature_exporter_http_port: 9101

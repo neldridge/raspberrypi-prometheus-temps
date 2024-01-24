@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log/syslog"
@@ -10,6 +11,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"syscall"
 
 	logrus "github.com/sirupsen/logrus"
 	lSyslog "github.com/sirupsen/logrus/hooks/syslog"
@@ -27,9 +29,11 @@ var (
 )
 
 type Config struct {
-	LogLevel       string
-	LogDestination string
-	LogFilename    string
+	LogLevel        string `json:"log_level"`
+	LogDestination  string `json:"log_destination"`
+	LogFilename     string `json:"log_filename"`
+	HttpBindAddress string `json:"http_bind_address"`
+	HttpPort        int    `json:"http_port"`
 }
 
 type CustomCommands struct {
@@ -271,6 +275,30 @@ func main() {
 		log.Error(fmt.Sprintf("failed to configure logger: %s", err.Error()))
 	}
 
+	config = Config{
+		LogLevel:        "info",
+		LogDestination:  "syslog",
+		LogFilename:     "/var/log/temperature-exporter.log",
+		HttpBindAddress: "0.0.0.0",
+		HttpPort:        9101,
+	}
+
+	if checkExists("/etc/temperature-exporter/config.json") {
+		log.Infof("Found config file at /etc/temperature-exporter/config.json")
+		// Read the file
+		file, err := os.ReadFile("/etc/temperature-exporter/config.json")
+		if err != nil {
+			log.Errorf("Failed to read config file: %s", err)
+			syscall.Exit(1)
+		}
+		// Unmarshal the file
+		err = json.Unmarshal(file, &config)
+		if err != nil {
+			log.Errorf("Failed to unmarshal config file: %s", err)
+			syscall.Exit(2)
+		}
+	}
+
 	/*
 		 _                   _
 		| | ___   __ _  __ _(_)_ __   __ _
@@ -279,7 +307,6 @@ func main() {
 		|_|\___/ \__, |\__, |_|_| |_|\__, |
 		         |___/ |___/         |___/
 	*/
-	config.LogLevel = "debug"
 	switch config.LogLevel {
 	case "trace":
 		log.SetLevel(logrus.TraceLevel)
@@ -312,8 +339,8 @@ func main() {
 	}
 
 	http.HandleFunc("/metrics", handler)
-	log.Infof("Server listening on :8080")
-	err = http.ListenAndServe(":8080", nil)
+	log.Infof("Server listening on %s:%d", config.HttpBindAddress, config.HttpPort)
+	err = http.ListenAndServe(fmt.Sprintf("%s:%d", config.HttpBindAddress, config.HttpPort), nil)
 	if err != nil {
 		log.Fatalf("Failed to start server: %s", err)
 	}

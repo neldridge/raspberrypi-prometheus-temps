@@ -1,0 +1,7 @@
+---
+- name: restart temperature-exporter
+  become: true
+  ansible.builtin.service:
+    name: temperature-exporter
+    state: restarted
+    enabled: true

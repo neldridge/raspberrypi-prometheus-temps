@@ -1,0 +1,13 @@
+[Unit]
+Description=Temperature Exporter Service
+After=network.target
+
+[Service]
+ExecStart={{ temperature_exporter_install_dir }}/temperature-exporter
+WorkingDirectory={{ temperature_exporter_config_dir }}
+User={{ temperature_exporter_user }}
+Group={{ temperature_exporter_user }}
+Restart=always
+
+[Install]
+WantedBy=default.target

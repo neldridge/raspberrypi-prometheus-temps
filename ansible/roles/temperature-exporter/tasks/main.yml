@@ -32,6 +32,8 @@
     owner: root
     group: root
     mode: 0644
+  notify:
+    - restart temperature-exporter
 
 - name: Create temperature-exporter service
   become: true

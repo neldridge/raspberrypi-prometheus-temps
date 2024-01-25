@@ -242,7 +242,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, temp := range tempsTmp {
 		log.Debugf("Found temperature: %s: %f", temp.Device, temp.Temp)
-		fmt.Fprintf(w, "%s_temperature{device=\"%s\"} %f\n", temp.Device, temp.Device, temp.Temp)
+
+		device := strings.ToLower(temp.Device)
+		device = strings.ReplaceAll(device, " ", "_")
+		device = strings.ReplaceAll(device, "-", "_")
+
+		fmt.Fprintf(w, "%s_temperature{device=\"%s\"} %f\n", device, temp.Device, temp.Temp)
 	}
 
 	tempsTmp, err = getThermalZones()
@@ -253,7 +258,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, temp := range tempsTmp {
 		log.Debugf("Found temperature: %s: %f", temp.Device, temp.Temp)
-		fmt.Fprintf(w, "%s_temperature{device=\"%s\"} %f\n", temp.Device, temp.Device, temp.Temp)
+
+		device := strings.ToLower(temp.Device)
+		device = strings.ReplaceAll(device, " ", "_")
+		device = strings.ReplaceAll(device, "-", "_")
+
+		fmt.Fprintf(w, "%s_temperature{device=\"%s\"} %f\n", device, temp.Device, temp.Temp)
 	}
 
 	fmt.Fprintf(w, "version{app=\"%s\", build_time=\"%s\"}", VERSION, BUILDTIME)

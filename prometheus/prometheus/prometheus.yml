@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: []
+    scheme: http
+    timeout: 10s
+    api_version: v1
+scrape_configs:
+  - job_name: "tempexporter"
+    static_configs:
+      - targets:
+        - 192.168.11.254:9101
+        - 192.168.11.141:9101
+        - b852.a3f.link:9101
+        - b5bc.a3f.link:9101
+        - b983.a3f.link:9101
+        - b762.a3f.link:9101
+        - b9a5.a3f.link:9101
+        - b8b9.a3f.link:9101
+    metrics_path: /metrics

@@ -266,7 +266,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%s_temperature{device=\"%s\"} %f\n", device, temp.Device, temp.Temp)
 	}
 
-	fmt.Fprintf(w, "version{app=\"%s\", build_time=\"%s\"}", VERSION, BUILDTIME)
+	fmt.Fprintf(w, "version{app=\"%s\", build_time=\"%s\"} 0", VERSION, BUILDTIME)
 	log.Infof("%s metrics served successfully", r.RemoteAddr)
 }
 

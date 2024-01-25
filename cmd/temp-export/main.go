@@ -267,6 +267,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "version{app=\"%s\", build_time=\"%s\"}", VERSION, BUILDTIME)
+	log.Infof("%s metrics served successfully", r.RemoteAddr)
 }
 
 func main() {
